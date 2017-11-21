@@ -1,0 +1,6 @@
+# local Visual Studio Code files
+.vscode/
+
+# build products
+build/
+*.exe
