@@ -6,6 +6,7 @@ using std::endl;
 using std::cin;
 
 #include "util/SDL_util.h"
+#include "util/util.h"
 
 #include "game/World.h"
 #include "game/Player.h"
@@ -36,9 +37,9 @@ int main(int, char*[]) {
     
     game::World world;
     world.addEntity(std::make_unique<game::Player>(300, 200));
-    world.addEnvEntity(std::make_unique<game::Wall>(200, 300));
-    world.addEnvEntity(std::make_unique<game::Wall>(320, 300));
-    world.addEnvEntity(std::make_unique<game::Wall>(200, 420));
+    for (int n = 0; n < 40; n++) {
+        world.addEnvEntity(std::make_unique<game::Wall>(util::rand()*1000, util::rand()*1000));
+    }
     
     while (!SDL_QuitRequested()) {
         // get & handle user input and such

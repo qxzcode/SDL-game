@@ -44,7 +44,7 @@ struct physics_data {
     double collisionTime = inf;
 };
 
-void calcEntryExit(physics_data& e1, physics_data& e2, uint8_t axis, double* entry, double* exit) {
+static void calcEntryExit(physics_data& e1, physics_data& e2, uint8_t axis, double* entry, double* exit) {
     *entry = +inf;
     *exit = -inf;
     double v = e1.v[axis]-e2.v[axis];
@@ -57,7 +57,7 @@ void calcEntryExit(physics_data& e1, physics_data& e2, uint8_t axis, double* ent
     }
 }
 
-void testCollision(physics_data& e1, physics_data& e2) {
+static void testCollision(physics_data& e1, physics_data& e2) {
     // find X entry/exit time
     double xEntry, xExit;
     calcEntryExit(e1, e2, 0, &xEntry, &xExit);
@@ -79,7 +79,7 @@ void testCollision(physics_data& e1, physics_data& e2) {
     }
 }
 
-auto updateEntities(World::entity_list_t& entities, double dt) {
+static auto updateEntities(World::entity_list_t& entities, double dt) {
     std::vector<physics_data> pData;
     for (auto it = entities.begin(); it != entities.end(); ) {
         auto& e = *it;
