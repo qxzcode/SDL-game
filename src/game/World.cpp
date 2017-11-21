@@ -25,9 +25,11 @@ struct physics_data {
         v[1] = e->vy * dt;
     }
     
-    void reset(double timeLeft) {
+    void reset(double timeTo, double timeLeft) {
         collision = nullptr;
         collisionTime = inf;
+        entity->x += v[0]*timeTo;
+        entity->y += v[1]*timeTo;
         v[0] *= timeLeft;
         v[1] *= timeLeft;
     }
@@ -66,7 +68,7 @@ void testCollision(physics_data& e1, physics_data& e2) {
     
     double entryTime = std::max(xEntry, yEntry);
     double exitTime  = std::min(xExit,  yExit);
-    if (entryTime > exitTime || (xEntry<-0.001 && yEntry<-0.001) || xEntry>1 || yEntry>1) {
+    if (entryTime > exitTime || (xEntry<-0.05 && yEntry<-0.05) || xEntry>1 || yEntry>1) {
         // no collision in this frame
     } else {
         if (entryTime < e1.collisionTime) {
@@ -98,37 +100,34 @@ void World::update(double dt) {
     auto epData = updateEntities(envEntities, dt);
     
     do {
-        // detect collisions
+        // detect collisions and get the first one
+        physics_data* first = nullptr;
         for (auto& pd : pData) {
             for (auto& epd : epData) {
                 testCollision(pd, epd);
             }
-        }
-        
-        physics_data* first = nullptr;
-        for (auto& pd : pData) {
             if (pd.collision && (!first || pd.collisionTime < first->collisionTime)) {
                 first = &pd;
             }
         }
         
         if (first) {
-            // resolve the collision
             physics_data* e2 = first->collision;
+            
+            // move everything up to the point of the collision
+            double timeTo = first->collisionTime;
+            double timeLeft = 1.0 - timeTo;
+            for (auto& pd : pData)  pd.reset(timeTo, timeLeft);
+            for (auto& pd : epData) pd.reset(timeTo, timeLeft);
+            
+            // apply the collision by changing the entity's velocity
             if (first->collisionOnX) {
                 first->entity->vx = e2->entity->vx;
-                first->entity->x += first->v[0]*first->collisionTime;// + e2->v[0]*(1-first->collisionTime);
-                first->entity->y += first->v[1];
+                first->v[0] = e2->v[0];
             } else {
                 first->entity->vy = e2->entity->vy;
-                first->entity->x += first->v[0];
-                first->entity->y += first->v[1]*first->collisionTime;// + e2->v[1]*(1-first->collisionTime);
+                first->v[1] = e2->v[1];
             }
-            
-            // reset stuff for the next step
-            double timeLeft = 1.0 - first->collisionTime;
-            for (auto& pd : pData)  pd.reset(timeLeft);
-            for (auto& pd : epData) pd.reset(timeLeft);
         } else {
             // no more collisions to handle
             break;
