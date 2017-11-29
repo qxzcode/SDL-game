@@ -9,7 +9,7 @@ namespace game {
         Wall(double x, double y):Entity(x, y, 60, 60) {}
         
         virtual bool update(double dt);
-        virtual void draw();
+        virtual void draw();int doot = 0;
         
     protected:
         //...

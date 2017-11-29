@@ -28,7 +28,12 @@ bool Player::update(double dt) {
     return false;
 }
 
+extern const double EPSILON;
 void Player::draw() {
     util::setColor(255, 110, 0);
     util::fillRect(x-rx, y-ry, rx*2, ry*2);
+    double rx = this->rx + EPSILON;
+    double ry = this->ry + EPSILON;
+    util::setColor(255, 255, 255);
+    util::strokeRect(x-rx, y-ry, rx*2, ry*2);
 }
