@@ -1,16 +1,10 @@
 #include "Wall.h"
 
-#include <cmath>
-
-#include "../util/SDL_util.h" // for user input & drawing
+#include "../util/SDL_util.h" // for drawing
 
 using game::Wall;
 
-static double t = 0;
-bool Wall::update(double dt) {
-    t += dt*0.25;
-    // vx = 25*sin(t);
-    // vy = 25*cos(t);
+bool Wall::update(double) {
     return false;
 }
 

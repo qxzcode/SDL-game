@@ -40,7 +40,6 @@ int main(int, char*[]) {
     for (int n = 0; n < 40; n++) {
         world.addEnvEntity(std::make_unique<game::Wall>(util::rand()*1000, util::rand()*1000));
     }
-    // world.addEnvEntity(std::make_unique<game::Wall>(200, 1+186.4597938488538204637734));
     
     while (!SDL_QuitRequested()) {
         // get & handle user input and such

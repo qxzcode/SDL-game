@@ -66,8 +66,7 @@ static double calcEntryExit(const physics_data& e1, const physics_data& e2, uint
     return v;
 }
 
-extern const double EPSILON;
-const double EPSILON = 1;
+constexpr double EPSILON = 1;
 static void testCollision(physics_data& e1, physics_data& e2) {
     // find X entry/exit time
     double xEntry, xExit;
