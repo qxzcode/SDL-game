@@ -31,12 +31,20 @@ void util::processEvents() {
     }
 }
 
+
+static double totalTime = 0.0;
+
 double util::getDeltaTime() {
     static Uint64 last = SDL_GetPerformanceCounter();
     Uint64 now = SDL_GetPerformanceCounter();
     double delta = (now - last) / double(SDL_GetPerformanceFrequency());
     last = now;
+    totalTime += delta;
     return delta;
+}
+
+double util::getTotalTime() {
+    return totalTime;
 }
 
 bool util::key::pressed(int scancode) {

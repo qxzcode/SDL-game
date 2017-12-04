@@ -12,6 +12,8 @@ using std::cin;
 #include "game/Player.h"
 #include "game/Wall.h"
 
+const std::string WINDOW_TITLE = "[ G A M E ]";
+
 int main(int, char*[]) {
     cout << "Program started." << endl;
     
@@ -20,7 +22,7 @@ int main(int, char*[]) {
         return 1;
     }
     
-    SDL_Window *win = SDL_CreateWindow("[ G A M E ]", 100, 100, 640, 480, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+    SDL_Window *win = SDL_CreateWindow(WINDOW_TITLE.c_str(), 100, 100, 640, 480, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     if (win == nullptr) {
         cerr << "SDL_CreateWindow Error: " << SDL_GetError() << endl;
         SDL_Quit();
@@ -37,10 +39,12 @@ int main(int, char*[]) {
     
     game::World world;
     world.addEntity(std::make_unique<game::Player>(300, 200));
-    for (int n = 0; n < 40; n++) {
-        world.addEnvEntity(std::make_unique<game::Wall>(util::rand()*1000, util::rand()*1000));
+    for (int n = 0; n < 140; n++) {
+        world.addEnvEntity(std::make_unique<game::Wall>(util::rand()*2000, util::rand()*2000));
     }
     
+    int fpsCount = 0;
+    double nextFPSUpdate = 1.0;
     while (!SDL_QuitRequested()) {
         // get & handle user input and such
         util::processEvents();
@@ -57,6 +61,16 @@ int main(int, char*[]) {
         
         // update the screen
         SDL_RenderPresent(ren);
+        
+        fpsCount++;
+        if (util::getTotalTime() >= nextFPSUpdate) {
+            std::string newTitle = WINDOW_TITLE + " (";
+            newTitle += std::to_string(fpsCount);
+            newTitle += " FPS)";
+            SDL_SetWindowTitle(win, newTitle.c_str());
+            fpsCount = 0;
+            nextFPSUpdate += 1.0;
+        }
     }
     
     SDL_DestroyRenderer(ren);

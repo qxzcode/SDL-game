@@ -13,6 +13,7 @@ namespace util {
     
     void processEvents();
     double getDeltaTime();
+    double getTotalTime();
     
     namespace key {
         bool pressed(int scancode);
