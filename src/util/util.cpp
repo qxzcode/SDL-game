@@ -9,7 +9,6 @@ using generator_t = std::mt19937;
 
 static generator_t::result_type getSeed() {
     auto seed = static_cast<generator_t::result_type>(std::chrono::high_resolution_clock::now().time_since_epoch().count());
-    seed = 3668391672;
     printf("seed = %u\n", seed);
     return seed;
 }

@@ -16,9 +16,5 @@ bool Wall::update(double dt) {
 
 void Wall::draw() {
     util::setColor(0, 255, 255);
-    if (doot) {
-        util::setColor(255, 255, 0);
-        doot--;
-    }
     util::strokeRect(x-rx, y-ry, rx*2, ry*2);
 }
