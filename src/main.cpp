@@ -10,6 +10,7 @@ using std::cin;
 
 #include "game/World.h"
 #include "game/Player.h"
+#include "game/Derp.h"
 #include "game/Wall.h"
 
 const std::string WINDOW_TITLE = "[ G A M E ]";
@@ -22,7 +23,7 @@ int main(int, char*[]) {
         return 1;
     }
     
-    SDL_Window *win = SDL_CreateWindow(WINDOW_TITLE.c_str(), 100, 100, 640, 480, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+    SDL_Window *win = util::window = SDL_CreateWindow(WINDOW_TITLE.c_str(), 100, 100, 640, 480, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     if (win == nullptr) {
         cerr << "SDL_CreateWindow Error: " << SDL_GetError() << endl;
         SDL_Quit();
@@ -38,10 +39,16 @@ int main(int, char*[]) {
     }
     
     game::World world;
-    world.addEntity(std::make_unique<game::Player>(300, 200));
+    auto player = new game::Player(300, 200);
+    world.addEntity(player);
     for (int n = 0; n < 140; n++) {
-        world.addEnvEntity(std::make_unique<game::Wall>(util::rand()*2000, util::rand()*2000));
+        world.addEnvEntity(new game::Wall(util::rand()*2000, util::rand()*2000));
     }
+    for (int n = 0; n < 20; n++) {
+        world.addEntity(new game::Derp(util::rand()*2000, util::rand()*2000));
+    }
+    
+    double camX = 300, camY = 300;
     
     int fpsCount = 0;
     double nextFPSUpdate = 1.0;
@@ -50,13 +57,18 @@ int main(int, char*[]) {
         util::processEvents();
         
         // update stuff
-        world.update(util::getDeltaTime());//SDL_Delay(100);
+        double dt = util::getDeltaTime();
+        double camAmt = 5.0*dt;
+        camX += camAmt*(player->x - camX);
+        camY += camAmt*(player->y - camY);
+        world.update(dt);//SDL_Delay(100);
         
         // clear the renderer
         util::setColor(0, 0, 0);
         SDL_RenderClear(ren);
         
         // draw stuff
+        util::setDrawOffset(util::winWidth()/2 - camX, util::winHeight()/2 - camY);
         world.draw();
         
         // update the screen

@@ -9,12 +9,12 @@ using namespace game;
 
 #include "Wall.h"
 
-void World::addEntity(std::unique_ptr<Entity> entity) {
-    entities.push_front(std::move(entity));
+void World::addEntity(Entity* entity) {
+    entities.push_front(std::unique_ptr<Entity>(entity));
 }
 
-void World::addEnvEntity(std::unique_ptr<Entity> entity) {
-    envEntities.push_front(std::move(entity));
+void World::addEnvEntity(Entity* entity) {
+    envEntities.push_front(std::unique_ptr<Entity>(entity));
 }
 
 // temporary physics/collision information for an Entity

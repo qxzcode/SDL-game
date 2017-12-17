@@ -3,10 +3,9 @@
 #include <cmath>
 
 #include "../util/SDL_util.h" // for user input & drawing
+#include "../util/util.h"
 
 using game::Player;
-
-constexpr double SQRT1_2 = 0.707106781186547524401;
 
 bool Player::update(double dt) {
     double mx = 0;
@@ -16,8 +15,8 @@ bool Player::update(double dt) {
     if (util::key::moveUp())   my--;
     if (util::key::moveDown()) my++;
     if (mx != 0 && my != 0) {
-        mx *= SQRT1_2;
-        my *= SQRT1_2;
+        mx *= util::SQRT1_2;
+        my *= util::SQRT1_2;
     }
     const double amt = 3000;
     vx += mx*amt*dt;

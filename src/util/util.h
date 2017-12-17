@@ -28,4 +28,11 @@ namespace util {
     
     extern thread_local PRNG rand;
     
+    
+    // mathematical constants
+    constexpr double PI = 3.14159265358979323846264338327950288;
+    constexpr double E = 2.71828182845904523536028747135266250;
+    constexpr double SQRT2 = 1.41421356237309504880168872420969808;
+    constexpr double SQRT1_2 = 0.70710678118654752440084436210484904;
+    
 }

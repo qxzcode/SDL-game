@@ -2,14 +2,19 @@
 
 #include <cstdint> // uint8_t
 
-// forward-declare this
+// forward-declare these
 struct SDL_Renderer;
+struct SDL_Window;
 
 namespace util {
     
     void setColor(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
     void strokeRect(int x, int y, int w, int h);
     void fillRect(int x, int y, int w, int h);
+    void setDrawOffset(int x, int y);
+    
+    int winWidth();
+    int winHeight();
     
     void processEvents();
     double getDeltaTime();
@@ -25,5 +30,6 @@ namespace util {
     }
     
     extern SDL_Renderer* renderer;
+    extern SDL_Window* window;
     
 }

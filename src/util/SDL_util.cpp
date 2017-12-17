@@ -3,19 +3,40 @@
 #include <SDL.h>
 
 SDL_Renderer* util::renderer;
+SDL_Window* util::window;
 
 void util::setColor(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
     SDL_SetRenderDrawColor(renderer, r, g, b, a);
 }
 
+static int xOff = 0, yOff = 0;
+
 void util::strokeRect(int x, int y, int w, int h) {
-    SDL_Rect rect = {x, y, w, h};
+    SDL_Rect rect = {x+xOff, y+yOff, w, h};
     SDL_RenderDrawRect(renderer, &rect);
 }
 
 void util::fillRect(int x, int y, int w, int h) {
-    SDL_Rect rect = {x, y, w, h};
+    SDL_Rect rect = {x+xOff, y+yOff, w, h};
     SDL_RenderFillRect(renderer, &rect);
+}
+
+void util::setDrawOffset(int x, int y) {
+    xOff = x;
+    yOff = y;
+}
+
+
+int util::winWidth() {
+    int width;
+    SDL_GetWindowSize(window, &width, nullptr);
+    return width;
+}
+
+int util::winHeight() {
+    int height;
+    SDL_GetWindowSize(window, nullptr, &height);
+    return height;
 }
 
 

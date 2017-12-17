@@ -9,8 +9,8 @@ namespace game {
     
     class World {
     public:
-        void addEntity(std::unique_ptr<Entity> entity);
-        void addEnvEntity(std::unique_ptr<Entity> entity);
+        void addEntity(Entity* entity);
+        void addEnvEntity(Entity* entity);
         
         void update(double dt);
         void draw();
