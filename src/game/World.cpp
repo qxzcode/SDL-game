@@ -110,10 +110,33 @@ static auto updateEntities(World::entity_list_t& entities, double dt) {
 }
 
 void World::update(double dt) {
+    // handle "soft" non-envionment collisions
+    for (auto it1 = entities.begin(); it1 != entities.end(); it1++) {
+        auto& e1 = *it1;
+        auto it2 = it1;
+        it2++;
+        for (; it2 != entities.end(); it2++) {
+            auto& e2 = *it2;
+            double dx = e2->x-e1->x, rx = e1->rx+e2->rx;
+            double dy = e2->y-e1->y, ry = e1->ry+e2->ry;
+            if (std::abs(dx) < rx && std::abs(dy) < ry) {
+                double d = std::hypot(dx, dy);
+                double r = std::hypot(rx, ry);
+                double force = 2000 * (1.0 - d/r);//r/d * 1000;
+                dx *= force/d;
+                dy *= force/d;
+                e1->applyForce(-dx, -dy, dt);
+                e2->applyForce(+dx, +dy, dt);
+                // printf("E-E COLL\n");
+            }
+        }
+    }
+    
     // update entity logic & initialize collision information
     auto pData  = updateEntities(entities, dt);
     auto epData = updateEntities(envEntities, dt);
     
+    // handle environment collisions
     do {
         // detect collisions and get the first one
         physics_data* first = nullptr;
